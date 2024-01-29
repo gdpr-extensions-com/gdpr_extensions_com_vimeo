@@ -1,0 +1,53 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+{namespace my=GdprExtensionsCom\GdprExtensionsComVimeo\ViewHelpers}
+
+
+<f:layout name="Default" />
+<f:section name="content">
+    <style type="text/css">
+        /* for widget*/
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        .gdprInner iframe {
+            height: 100vh;
+        }
+    </style>
+
+
+
+    <f:if condition="{VimeoData.gdpr_vm_url}">
+        <div class="gdprContainer">
+            <div class="gdprInner" style="width:100%; height:100%;">
+                <iframe class='vimeoplayer' id="go-vimeo-player-<f:format.raw>{VimeoData.uid}</f:format.raw>"
+                    width="100%" height="100%" src=""
+                    data-src="<f:format.raw>{VimeoData.gdpr_vm_url}</f:format.raw>?enablejsapi=1&autoplay=<f:format.raw>{VimeoData.gdpr_vm_autoplay}</f:format.raw>&cc_load_policy=<f:format.raw>{VimeoData.gdpr_vm_show_captions}</f:format.raw>&iv_load_policy=<f:format.raw>{f:if(condition:'{VimeoData.gdpr_vm_disable_annotations}',then:'3',else:'1')}</f:format.raw>&disablekb=<f:format.raw>{VimeoData.gdpr_vm_disable_keyboard}</f:format.raw>&fs=<f:format.raw>{VimeoData.gdpr_vm_display_fs}</f:format.raw>"
+                    data-2click-service="vimeo" data-2click-type="video" wmode="Opaque" frameborder="0"
+                    allowfullscreen></iframe>
+
+            </div>
+        </div>
+
+    </f:if>
+</f:section>
+
+</html>
