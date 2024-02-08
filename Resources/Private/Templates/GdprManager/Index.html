@@ -14,20 +14,20 @@ in /Configuration/ExtensionBuilder/settings.yaml:
 Otherwise your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="content">
-    <h1>Listing for GdprManager</h1>
+    <h1><f:translate key="listing.gdpr.manager" extensionName="GdprExtensionsComVimeo" /></h1>
     <f:flashMessages />
 
     <table class="tx_gdprextensionscomvimeo">
         <tr>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.heading" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.content" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_text" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.enable_background_image" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_color" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.text_color" /></th>
-            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_shape" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.heading" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.content" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_text" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.enable_background_image" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_color" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.text_color" extensionName="GdprExtensionsComVimeo" /></th>
+            <th><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_shape" extensionName="GdprExtensionsComVimeo" /></th>
             <th></th>
             <th></th>
         </tr>
@@ -42,12 +42,12 @@ Otherwise your changes will be overwritten the next time you save the extension 
                 <td><f:link.action action="show" arguments="{gdprManager : gdprManager}">{gdprManager.buttonColor}</f:link.action></td>
                 <td><f:link.action action="show" arguments="{gdprManager : gdprManager}">{gdprManager.textColor}</f:link.action></td>
                 <td><f:link.action action="show" arguments="{gdprManager : gdprManager}">{gdprManager.buttonShape}</f:link.action></td>
-                <td><f:link.action action="edit" arguments="{gdprManager : gdprManager}">Edit</f:link.action></td>
-                <td><f:link.action action="delete" arguments="{gdprManager : gdprManager}">Delete</f:link.action></td>
+                <td><f:link.action action="edit" arguments="{gdprManager : gdprManager}"><f:translate key="edit.btn" extensionName="GdprExtensionsComVimeo" /></f:link.action></td>
+                <td><f:link.action action="delete" arguments="{gdprManager : gdprManager}"><f:translate key="delete.btn" extensionName="GdprExtensionsComVimeo" /></f:link.action></td>
             </tr>
         </f:for>
     </table>
 
-    <f:link.action action="new">New GdprManager</f:link.action>
+    <f:link.action action="new"><f:translate key="new.gdpr" extensionName="GdprExtensionsComVimeo" /></f:link.action>
 </f:section>
 </html>

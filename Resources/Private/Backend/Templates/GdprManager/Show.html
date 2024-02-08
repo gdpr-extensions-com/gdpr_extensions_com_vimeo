@@ -27,10 +27,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
 </f:section>
 
 <f:section name="Content">
-    <h1>Single View for GdprManager</h1>
+    <h1><f:translate key="single.view.heading" extensionName="GdprExtensionsComVimeo" /></h1>
 
     <f:flashMessages />
     <f:render partial="GdprManager/Properties" arguments="{gdprManager: gdprManager}" />
-    <f:link.action action="list" class="btn btn-default">Back to list</f:link.action>
+    <f:link.action action="list" class="btn btn-default"><f:translate key="back.list.btn" extensionName="GdprExtensionsComVimeo" /></f:link.action>
 </f:section>
 </html>

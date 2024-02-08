@@ -38,7 +38,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
     <div class="d-none">
         <span id="uploadImageUrl">{uploadImageUrl}</span>
     </div>
-    <h1>GDPR Manager</h1>
+    <h1><f:translate key="gdpr.heading" extensionName="GdprExtensionsComVimeo" /></h1>
 
     <f:flashMessages />
 
@@ -46,7 +46,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
     <f:form action="update" name="gdprManager" object="{gdprManager}">
         <f:render partial="GdprManager/FormFields" arguments="{gdprManager: gdprManager}" />
-        <f:form.submit value="Save" class="btn btn-default btn-bg" />
+        <f:form.submit value="{f:translate(key:'save.btn', extensionName: 'GdprExtensionsComVimeo')}" class="btn btn-default btn-bg" />
     </f:form>
 </f:section>
 </html>

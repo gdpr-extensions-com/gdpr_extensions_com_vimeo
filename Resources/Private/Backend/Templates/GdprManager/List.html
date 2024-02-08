@@ -259,12 +259,12 @@ Otherwise your changes will be overwritten the next time you save the extension 
       }
 
   </style>
-    <h1>Manage Your GDPR 2 Click Solution</h1>
+    <h1><f:translate key="gdpr.twoclick.desc" extensionName="GdprExtensionsComVimeo" /></h1>
 
 
     <div class="uploadImage-cookie ">
         <label for="cookieWidgetImage">
-            <f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.cookie_widget_image" />
+            <f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.cookie_widget_image" extensionName="GdprExtensionsComVimeo" />
         </label><br />
         <f:if condition="{cookieWidgetData.cookie_widget_image} == ''">
             <f:then>
@@ -285,7 +285,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
         </f:if>
         <f:form.textarea name="cookieWidgetImage" id="cookieWidgetImage" cols="40" rows="15" value="{cookieWidgetData.cookie_widget_image}" class="d-none" /><br />
         <div class="file-upload-wrapper my-4-9" id="selected-image-container-cookie">
-            <button class="choose_file btn-bg-transparent" >Choose file</button>
+            <button class="choose_file btn-bg-transparent" ><f:translate key="choose.file" extensionName="GdprExtensionsComVimeo" /></button>
             <input
                 type="file"
                 id="file-input-cookie"
@@ -296,30 +296,30 @@ Otherwise your changes will be overwritten the next time you save the extension 
         </div>
     </div>
     <label for="cookieWidgetPosition" class="mt-5px">
-        <f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.cookie_widget_position" />
+        <f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.cookie_widget_position" extensionName="GdprExtensionsComVimeo" />
     </label><br />
     <div class="d-flex">
         <f:form.select name="cookieWidgetPosition" id="cookieWidgetPosition" class="field-style mt-5px w-185px">
-            <f:form.select.option value="left">Left</f:form.select.option>
-            <f:form.select.option value="right">Right</f:form.select.option>
+            <f:form.select.option value="left"><f:translate key="select.left" extensionName="GdprExtensionsComVimeo" /></f:form.select.option>
+            <f:form.select.option value="right"><f:translate key="select.right" extensionName="GdprExtensionsComVimeo" /></f:form.select.option>
         </f:form.select>
     </div>
-    <button type="button" id="btnCookieWidget" class="btn-bg mt-5px">Save</button>
+    <button type="button" id="btnCookieWidget" class="btn-bg mt-5px"><f:translate key="save.btn" extensionName="GdprExtensionsComVimeo" /></button>
 
 
 
     <f:flashMessages />
     <hr />
-    <p class="mb-5"><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.extension_title" /></p>
+    <p class="mb-5"><f:translate key="tx_gdprextensionscomyoutube_domain_model_gdprmanager.extension_title" extensionName="GdprExtensionsComVimeo" /></p>
     <select class="pad-3 field-style ext-names">
-      <option value="0">Please Select</option>
+      <option value="0"><f:translate key="select.text" extensionName="GdprExtensionsComVimeo" /></option>
       <f:for each="{gdprManagers}" as="gdprManager">
         <option value="{f:uri.action(controller: 'GdprManager', action: 'edit', arguments: {gdprManager: gdprManager})}">{gdprManager.extensionTitle}</option>
       </f:for>
     </select>
     <div class="success-continer d-none">
         <f:image src="EXT:gdpr_extensions_com_vimeo/Resources/Public/Icons/success.gif" alt="success" class="success-img" />
-        <p>Changes saved successfully</p>
+        <p><f:translate key="changes.success" extensionName="GdprExtensionsComVimeo" /></p>
     </div>
 
 
