@@ -1,4 +1,4 @@
-# GDPR Vimeo 2 Click Solution Extension for TYPO3
+# GDPR-Extensions.com - Vimeo 2-Click Solution for TYPO3
 
 ## Overview
 
