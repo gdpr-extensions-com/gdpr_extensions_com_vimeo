@@ -223,6 +223,38 @@ return [
             ],
         ],
 
+        'extension_key' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:gdpr_extensions_com_vimeo/Resources/Private/Language/locallang_db.xlf:tx_gdprextensionscomyoutube_domain_model_gdprmanager.ext_title',
+            'description' => 'LLL:EXT:gdpr_extensions_com_vimeo/Resources/Private/Language/locallang_db.xlf:tx_gdprextensionscomyoutube_domain_model_gdprmanager.ext_title_desc',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+
+        'locations' => [
+            'exclude' => true,
+            'label' => 'location',
+            'description' => 'Map location',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'tx_gdprextensionscomgooglemap_domain_model_maplocation',
+                'foreign_field' => 'map',
+                'maxitems' => 9999,
+                'appearance' => [
+                    'collapseAll' => 0,
+                    'levelLinksPosition' => 'top',
+                    'showSynchronizationLink' => 1,
+                    'showPossibleLocalizationRecords' => 1,
+                    'showAllLocalizationLink' => 1
+                ],
+            ],
+
+        ],
+
 
     ],
 ];

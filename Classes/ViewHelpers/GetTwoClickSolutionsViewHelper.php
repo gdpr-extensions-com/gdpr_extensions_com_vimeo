@@ -8,6 +8,7 @@ use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Core\Database\Connection;
 
 class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
 {
@@ -30,24 +31,42 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
 
 
     }
-
     public function render()
     {
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         $extensions = ExtensionManagementUtility::getLoadedExtensionListArray();
         $extensionNames = [];
-
-        foreach ($extensions as $extensionKey){
+        
+        foreach ($extensions as $extensionKey) {
             if ($packageManager->isPackageAvailable($extensionKey)) {
                 $extensionName = $packageManager->getPackage($extensionKey)->getPackageMetaData()->getTitle();
-                array_push($extensionNames,$extensionName);
+                // Directly assign the name to the key in the associative array.
+                $extensionNames[$extensionKey] = $extensionName;
             }
         }
+        
+        // Filter based on keys, looking for 'gdpr_two_x' in the extensionKey.
+        $twoClickSolutions = array_filter($extensionNames, function ($key) {
+            return str_contains($key, 'gdpr_two_x') || str_contains($key, 'gdpr_extensions_com');
+        }, ARRAY_FILTER_USE_KEY); // Use ARRAY_FILTER_USE_KEY to filter by key.
 
-        $twoClickSolutions = array_values(array_filter($extensionNames, function ($ext) {
-            return str_contains($ext, '2clicksolution');
-        }));
+        $gdprDellQb = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_gdprextensionscomyoutube_domain_model_gdprmanager');
 
+        $gdprDellQb
+            ->delete('tx_gdprextensionscomyoutube_domain_model_gdprmanager')
+            ->where(
+                $gdprDellQb->expr()->notIn(
+                    'extension_title',
+                    $gdprDellQb->createNamedParameter($twoClickSolutions,Connection::PARAM_STR_ARRAY)
+                )
+            )
+            ->executeStatement();
+         
+            $twoClickSolutionsWithoutReviews = array_filter($twoClickSolutions, function ($ext) {
+                // Use 'stripos' for case-insensitive search; returns false if 'review' is not found.
+                return stripos($ext, 'review') === false;
+            });
+            
         $gdprManagers = $this->gdprManagerRepository->findAll();
 
         $installedTwoClickSol = [];
@@ -55,15 +74,18 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
             array_push($installedTwoClickSol,$twoClickSol->getExtensionTitle());
         }
 
-        $missingExtensions = array_diff($twoClickSolutions, $installedTwoClickSol);
+        $missingExtensions = array_diff($twoClickSolutionsWithoutReviews, $installedTwoClickSol);
+    
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_gdprextensionscomyoutube_domain_model_gdprmanager');
+      
 
-        foreach ($missingExtensions as $value) {
+        foreach ($missingExtensions as $key => $value) {
             $queryBuilder
                 ->insert('tx_gdprextensionscomyoutube_domain_model_gdprmanager')
                 ->values([
                     'extension_title' => $value,
+                    'extension_key' => $key,
                     'heading' => '', // Default empty string
                     'content' => '', // Default empty string
                     'button_text' => '', // Default empty string
@@ -76,24 +98,18 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 ])
                 ->execute();
         }
-        $gdprManagers = $this->gdprManagerRepository->findAll()->toArray();
+        $gdprManagers = $this->gdprManagerRepository->fetchGdprManagerWithoutReviews()->toArray();    
 
         $normalizedGdprManagers = [];
         foreach ($gdprManagers as $gdprManager) {
-//            dd($gdprManager->_getCleanProperties());
+
             // Clean properties should be an associative array which can be JSON encoded.
             if (is_array($gdprManager->_getCleanProperties())) {
                 $properties = $gdprManager->_getCleanProperties();
-
-                // Get the extensionTitle and split it to extract 'vimeo'
-                $extensionTitleParts = explode('-', $properties['extensionTitle']);
-                $key = $extensionTitleParts[3];
-
-                // Use 'vimeo' as the key in the normalizedGdprManagers array
-                $normalizedGdprManagers[$key] = $properties;
+                // Use 'google_reviewlisting' as the key in the normalizedGdprManagers array
+                $normalizedGdprManagers[$properties['extensionKey']] = $properties;
             }
         }
-
 
         $jsonString = json_encode($normalizedGdprManagers);
 

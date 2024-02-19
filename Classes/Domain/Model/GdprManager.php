@@ -20,7 +20,7 @@ namespace GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model;
 class GdprManager extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
-    /**
+   /**
      * heading
      *
      * @var string
@@ -103,8 +103,84 @@ class GdprManager extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $extensionTitle = '';
 
     /**
+     * extensionKey
+     *
+     * @var string
+     */
+    protected $extensionKey = '';
+
+    /**
      * @return string
      */
+
+    /**
+     * locations
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\MapLocation>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     */
+    protected $locations = null;
+
+        /**
+     * mapApi
+     *
+     * @var string
+     */
+    protected $mapApi = '';
+
+    /**
+     * @return string
+     */
+    public function getMapApi(): string
+    {
+        return $this->mapApi;
+    }
+
+    /**
+     * @param string $mapApi
+     */
+    public function setMapApi(string $mapApi): void
+    {
+        $this->mapApi = $mapApi;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|null
+     */
+    public function getLocations(): ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->locations;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage|null $locations
+     */
+    public function setLocations(?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $locations): void
+    {
+        $this->locations = $locations;
+    }
+
+    /**
+     * Adds a MapLocation
+     *
+     * @param \GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\MapLocation $location
+     * @return void
+     */
+    public function addLocation(\GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\MapLocation $location)
+    {
+        $this->locations->attach($location);
+    }
+
+    /**
+     * Removes a MapLocation
+     *
+     * @param \GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\MapLocation $locationToRemove The MapLocation to be removed
+     * @return void
+     */
+    public function removeLocation(\GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\MapLocation $locationToRemove)
+    {
+        $this->locations->detach($locationToRemove);
+    }
     public function getExtensionTitle(): string
     {
         return $this->extensionTitle;
@@ -118,6 +194,18 @@ class GdprManager extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->extensionTitle = $extensionTitle;
     }
 
+    public function getExtensionKey(): string
+    {
+        return $this->extensionKey;
+    }
+
+    /**
+     * @param string $extensionKey
+     */
+    public function setExtensionKey(string $extensionKey): void
+    {
+        $this->extensionKey = $extensionKey;
+    }
     /**
      * Returns the heading
      *
@@ -324,6 +412,12 @@ class GdprManager extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->buttonTextColor = $buttonTextColor;
     }
+
+    public function clearLocations()
+    {
+        $this->locations = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
 
 
 

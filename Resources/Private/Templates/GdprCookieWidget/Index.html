@@ -305,7 +305,7 @@
                             <p class="mb-0"><b>{sol.extensionTitle}</b></p>
                             <label class="switch mb-0">
                                 <input type="checkbox" class="toggleButton" id="{i.index}"
-                                    data-ext-title="<f:format.raw>{sol.extensionTitle}</f:format.raw>">
+                                    data-ext-title="<f:format.raw>{sol.extensionKey}</f:format.raw>">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -321,409 +321,558 @@
     </div>
     <f:asset.script identifier="2ClickSol">
 
-        /*
 
-    _2ClickIframePrivacy Class contains methods for handling user consent about cookies.
+    /*
 
-    It internally uses cookies to remember user choices about privacy settings.
+_2ClickIframePrivacy Class contains methods for handling user consent about cookies.
 
-    Classes:
-        - privacy-msg: Used to style privacy message displayed within iframe
-        - toggleButton : Used by buttons which enables/disables specific services
+It internally uses cookies to remember user choices about privacy settings.
 
-    Methods:
-       - setConsentStatus(service,status) : Sets the consent status for a service and stores it as a cookie.
-       - deleteCookie(name) : Deletes the specified cookie.
-       - getConsentStatuses(): Returns a JSON object representing all the cookies whose consent was obtained.
-       - wrap(el, wrapper, type, text, heading): Adds 'privacy-msg' div element inside an iframe containing info about data security and obtain user’s consent
-       - EnableContent(type): Enables the iframe content once user provides consent.
-       - DisableContent(type,e): Disables the iframe content if user withdraws consent.
-       - Init(UserConfig) : Initializes the instance with user provided configurations.
+Classes:
+    - privacy-msg: Used to style privacy message displayed within iframe
+    - toggleButton : Used by buttons which enables/disables specific services
 
-    Properties:
+Methods:
+   - setConsentStatus(service,status) : Sets the consent status for a service and stores it as a cookie.
+   - deleteCookie(name) : Deletes the specified cookie.
+   - getConsentStatuses(): Returns a JSON object representing all the cookies whose consent was obtained.
+   - wrap(el, wrapper, type, text, heading): Adds 'privacy-msg' div element inside an iframe containing info about data security and obtain user’s consent
+   - EnableContent(type): Enables the iframe content once user provides consent.
+   - DisableContent(type,e): Disables the iframe content if user withdraws consent.
+   - Init(UserConfig) : Initializes the instance with user provided configurations.
 
-       - consentCookieName: Specifies the name of the cookie used for preserving user consent settings
-       - toggleButtons: Represents all buttons which enables/disables specific services.
-       - consentStatuses: Stores the statuses of users' consent for cookies
+Properties:
 
-     */
+   - consentCookieName: Specifies the name of the cookie used for preserving user consent settings
+   - toggleButtons: Represents all buttons which enables/disables specific services.
+   - consentStatuses: Stores the statuses of users' consent for cookies
+
+ */
+
+    let arr = JSON.parse('<f:format.raw>{twoClickSol}</f:format.raw>');
+    console.log(arr);
+    document.addEventListener('DOMContentLoaded', () => {
+        _2ClickIframePrivacy.init('',arr)
+    });
+    let switchs = document.querySelectorAll('.switch .toggleButton');
+    let acceptBtn = document.querySelector('.accept-all .btn-lg');
+    acceptBtn.addEventListener('click', function() {
+        switchs.forEach((item, index)=>{
+            if(item.checked != true) {
+                item.click();
+                acceptBtn.disabled = true;
+                acceptBtn.classList.add('disabled');
+            }
+        })
+    })
 
 
-        let arr = JSON.parse('<f:format.raw>{twoClickSol}</f:format.raw>');
-        console.log(arr);
-        document.addEventListener('DOMContentLoaded', () => {
-            _2ClickIframePrivacy.init('',arr)
-        });
-        let switchs = document.querySelectorAll('.switch .toggleButton');
-        let acceptBtn = document.querySelector('.accept-all .btn-lg');
-        acceptBtn.addEventListener('click', function() {
-            switchs.forEach((item, index)=>{
-                if(item.checked != true) {
-                    item.click();
-                    acceptBtn.disabled = true;
-                    acceptBtn.classList.add('disabled');
-                }
+    for(let sol in arr) {
+
+        let solSetting = arr[sol];
+
+        var modal = document.getElementById("gdpr-extensions-com-cookie-model");
+        var btn = document.querySelectorAll(".gdpr-extensions-com-cookie-fab-mo");
+        var span = document.getElementsByClassName("close")[0];
+        btn.forEach((item, index) => {
+            item.addEventListener('click', function () {
+                modal.style.display = "block";
             })
         })
 
 
-        for(let sol in arr) {
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
 
-            let solSetting = arr[sol];
-
-            var modal = document.getElementById("gdpr-extensions-com-cookie-model");
-            var btn = document.querySelectorAll(".gdpr-extensions-com-cookie-fab-mo");
-            var span = document.getElementsByClassName("close")[0];
-            btn.forEach((item, index) => {
-                item.addEventListener('click', function () {
-                    modal.style.display = "block";
-                })
-            })
-
-
-            span.onclick = function () {
+        window.onclick = function (event) {
+            if (event.target == modal) {
                 modal.style.display = "none";
             }
+        }
 
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+
+        var _2ClickIframePrivacy = new function () {
+
+            var consentCookieName = 'GDPR_Extensions_2ClickCookieConsent';
+            var toggleButtons = document.getElementsByClassName("toggleButton");
+            let gdprInner = document.getElementById('gdpr-inner')
+
+
+            // Initialize consent statuses:
+            var consentStatuses = getConsentStatuses();
+
+            var config = {
+                enableCookies: true,
+                useSessionCookie: true,
+                cookieNamespace: '_2ClickIPEnable-',
+                showContentLabel: 'Inhalt anzeigen',
+                rememberChoiceLabel: 'Auswahl merken',
+                privacyPolicyLabel: 'Datenschutzerklärung',
+                privacyPolicyUrl: false
+            };
+
+            this.types = new Array(
+                {
+                    type: 'video',
+                    description: solSetting.content,
+                    heading: solSetting.heading,
+                    btnColor: solSetting.buttonColor,
+                    textColor: solSetting.textColor,
+                    imagePath: solSetting.backgroundImage,
+                    imageStatus: solSetting.enableBackgroundImage,
+                    bgColor: solSetting.backgroundImageColor,
+                    buttonTextColor: solSetting.buttonTextColor,
+                    btnText: solSetting.buttonText,
+                    btnShape: solSetting.buttonShape,
+                },
+                {
+                    type: 'map',
+                    description: solSetting.content,
+                    heading: solSetting.heading,
+                    btnColor: solSetting.buttonColor,
+                    textColor: solSetting.textColor,
+                    imagePath: solSetting.backgroundImage,
+                    imageStatus: solSetting.enableBackgroundImage,
+                    bgColor: solSetting.backgroundImageColor,
+                    buttonTextColor: solSetting.buttonTextColor,
+                    btnText: solSetting.buttonText,
+                    btnShape: solSetting.buttonShape,
+                },
+                {
+                    type: 'calendar',
+                    description: '<f:format.raw>{YoutubeSettings.content}</f:format.raw><br />',
+                    heading: 'Zum Aktivieren des Videos bitte auf den Link klicken. Durch das Aktivieren von eingebetteten Videos werden Daten an den jeweiligen Anbieter übermittelt. Weitere Informationen können unserer Datenschutzerklärung entnommen werden.<br />'
+
+                }
+            );
+
+            function setConsentStatus(service, status) {
+                consentStatuses[service] = status;
+                
+                let cookie = getConsentStatuses();
+                if (cookie != {}) {
+                    deleteCookie(consentCookieName);
+                }
+                var d = new Date;
+                d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * 365);
+                document.cookie = consentCookieName + "=" + JSON.stringify(consentStatuses) + ";path=/;expires=" + d.toGMTString();
+
+            }
+
+            function deleteCookie(name) {
+                // Create an expired date.
+                var expiredDate = new Date();
+                expiredDate.setTime(expiredDate.getTime() - (1000 * 3600)); // Subtracting 1 hour from current time
+
+                // Setting the cookie with an expired date deletes it.
+                document.cookie = name + "=; expires=" + expiredDate.toGMTString() + "; path=/";
+            }
+
+            function getConsentStatuses() {
+                var v = document.cookie.match('(^|;) ?' + consentCookieName + '=([^;]*)(;|$)');
+                return v ? JSON.parse(v[2]) : {};
+            }
+
+            // Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
+
+            function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape) {
+                el.parentNode.insertBefore(wrapper, el);
+                wrapper.className = 'privacy-msg privacy-' + type + '-msg';
+                wrapper.style.width = el.clientWidth + 'px';
+                wrapper.style.height = el.clientHeight + 'px';
+                wrapper.innerHTML = imageStatus == 1 ? "<div class='bgComtainer-image'><img class='bg-image' src='" + imagePath + "'/><div class='overlay'></div>" : "";
+                wrapper.innerHTML += '<h2 style="color:' + textColor + '">' + heading + '</h2>';
+                wrapper.innerHTML += '<p class="description" style="color:' + textColor + '">' + text + '</p>' + '<a href="#foo" class="link-action ' + btnShape + '" style="background-color: ' + btnColor + ';color:' + buttonTextColor + '" onclick="_2ClickIframePrivacy.EnableContent(\'' + type + '\'); return false;">' + btnText + '</a>';
+                if (config.enableCookies) {
+                    wrapper.innerHTML = wrapper.innerHTML + '<label class="checkbox-label"  style="color:' + textColor + ';display: none"><input type="checkbox" checked style="border-color: ' + btnColor + '" name="remind-\'' + type + '\'" /> ' + config.rememberChoiceLabel + '</label>';
+                }
+                if (config.privacyPolicyUrl) {
+                    wrapper.innerHTML = wrapper.innerHTML + '<br /><a href="' + config.privacyPolicyUrl + '">' + config.privacyPolicyLabel + '</a>';
+                }
+                wrapper.innerHTML = '<div class="wraper" style="background-color: ' + bgColor + '"><p>' + wrapper.innerHTML + '</p></div>';
+                wrapper.appendChild(el);
+            }
+
+            this.EnableContent = function (type) {
+                var i;
+
+                // Cookies globally enabled by config?
+                var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
+
+                if (config.enableCookies) {
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].checked == true) {
+                            let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service'); // get service name from iframe
+                            debugger;
+                            setConsentStatus(service, '1');
+                        }
+                    }
+                }
+
+
+                var x = document.querySelectorAll('div.privacy-' + type + '-msg .wraper');
+                for (i = 0; i < x.length; i++) {
+                    while (x[i].firstChild) {
+                        x[i].removeChild(x[i].firstChild);
+                    }
+                }
+
+                x = document.querySelectorAll('div.privacy-' + type + '-msg');
+                for (i = 0; i < x.length; i++) {
+                    var parent = x[i].parentNode;
+
+                    // Move all children out of the element
+                    while (x[i].firstChild) parent.insertBefore(x[i].firstChild, x[i]);
+
+                    // Remove the empty element
+                    parent.removeChild(x[i]);
+                }
+
+                x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+                // debugger
+                for (i = 0; i < x.length; i++) {
+
+                    // debugger
+                    let serviceType = x[i].getAttribute("data-2click-service");
+                    if(serviceType === 'google_reviewlisting'){
+                        if(i == 0){
+                            let parent = x[i];
+                            let mapDiv = document.createElement('div');
+                            mapDiv.id = "map" + i;
+                            mapDiv.className = "map";
+                            parent.parentNode.insertBefore(mapDiv, parent.nextSibling)
+                            // debugger
+                            loadMapScript(x[i].nextElementSibling);
+                        }
+                        else {
+                            initMap((x[i].nextElementSibling));
+                        }
+                    }
+                    // debugger;
+                    x[i].src = x[i].getAttribute("data-src");
+                }
+
+                // If available, execute the callback that is defined for the currently active type
+                for (i = 0; i < this.types.length; i++) {
+                    if (this.types[i].type == type && this.types[i].callback) {
+                        window[this.types[i].callback]();
+                    }
+                }
+
+
+                for (let i = 0; i < toggleButtons.length; i++) {
+                    let extTitle = toggleButtons[i].getAttribute('data-ext-title');
+                    let service = extTitle; // assuming that extension title always has the service name at the third position
+
+                    // initially set the checkbox according to the cookie value
+
+                    toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
+
+                }
+                gdprInner?.classList.remove('gdprInner');
+                if(areAllChecked()) {
+                    acceptBtn.disabled = true;
+                    acceptBtn.classList.add('disabled');
                 }
             }
 
+            function DisableContent(type, e) {
+                var i;
 
-            var _2ClickIframePrivacy = new function () {
+                // Accessing all relevant checkboxes
+                var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
 
-                var consentCookieName = 'GDPR_Extensions_2ClickCookieConsent';
-                var toggleButtons = document.getElementsByClassName("toggleButton");
-                let gdprInner = document.getElementById('gdpr-inner')
+                for (let i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked == false) { // Checking if the checkbox is not checked
+                        let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service');
+                        setConsentStatus(service, '0'); // Set consent status to '0' indicating disapproval
+                    }
+                }
 
+                var x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+                for (i = 0; i < x.length; i++) {
+                    let dummy = x[i].innerHTML;
+                    // debugger
 
-                // Initialize consent statuses:
-                var consentStatuses = getConsentStatuses();
-
-                var config = {
-                    enableCookies: true,
-                    useSessionCookie: true,
-                    cookieNamespace: '_2ClickIPEnable-',
-                    showContentLabel: 'Inhalt anzeigen',
-                    rememberChoiceLabel: 'Auswahl merken',
-                    privacyPolicyLabel: 'Datenschutzerklärung',
-                    privacyPolicyUrl: false
-                };
-
-                this.types = new Array(
-                    {
-                        type: 'video',
-                        description: solSetting.content,
-                        heading: solSetting.heading,
-                        btnColor: solSetting.buttonColor,
-                        textColor: solSetting.textColor,
-                        imagePath: solSetting.backgroundImage,
-                        imageStatus: solSetting.enableBackgroundImage,
-                        bgColor: solSetting.backgroundImageColor,
-                        buttonTextColor: solSetting.buttonTextColor,
-                        btnText: solSetting.buttonText,
-                        btnShape: solSetting.buttonShape,
-                    },
-                    {
-                        type: 'map',
-                        description: '<f:format.raw>{YoutubeSettings.content}</f:format.raw><br />',
-                        heading: 'Zum Aktivieren des Videos bitte auf den Link klicken. Durch das Aktivieren von eingebetteten Videos werden Daten an den jeweiligen Anbieter übermittelt. Weitere Informationen können unserer Datenschutzerklärung entnommen werden.<br />'
-                    },
-                    {
-                        type: 'calendar',
-                        description: '<f:format.raw>{YoutubeSettings.content}</f:format.raw><br />',
-                        heading: 'Zum Aktivieren des Videos bitte auf den Link klicken. Durch das Aktivieren von eingebetteten Videos werden Daten an den jeweiligen Anbieter übermittelt. Weitere Informationen können unserer Datenschutzerklärung entnommen werden.<br />'
+                    x[i].src = ''; // Disabling the iframe by setting src as empty
+                    if(type == 'google_reviewlisting'){
+                        let elementToRemove = x[i].nextElementSibling;
+                        if(elementToRemove){
+                            elementToRemove.parentNode.removeChild(elementToRemove);
+                        }
 
                     }
+                }
+
+                // If available, execute the callback that is defined for the currently active type
+                for (i = 0; i < e.length; i++) {
+                    if (e[i].type == type && e[i].callback) {
+                        window[e[i].callback]();
+                    }
+                }
+                gdprInner?.classList.add('gdprInner');
+                acceptBtn.disabled = false;
+                acceptBtn.classList.remove('disabled');
+            }
+
+            const loadMapScript = function (parent) {
+                // debugger;
+                const mapScript = document.createElement("script");
+                const body = document.querySelector("body");
+                const mapsApiKey = document.getElementById("mapApiKey").innerText;
+
+                mapScript.setAttribute(
+                    "src",
+                    `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=geometry`
                 );
 
-                function setConsentStatus(service, status) {
-                    consentStatuses[service] = status;
-                    let cookie = getConsentStatuses();
-                    if (cookie != {}) {
-                        deleteCookie(consentCookieName);
+                console.log("exec: ", `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=geometry`);
+                body.insertAdjacentElement("beforeend", mapScript);
+
+                mapScript.onload = () => {
+                    initMap(parent);
+                };
+
+                mapScript.onerror = function (error) {
+                    console.error("Error loading Google Maps API:", error);
+                };
+            };
+
+            function initMap(parent) {
+
+                const latLongData = JSON.parse(document.getElementById("LatLongData").innerText);
+                const markerImagePath = document.getElementById("markerImagePath").innerText;
+                var firstKey = Object.keys(latLongData)[0];
+                var firstLocation = latLongData[Object.keys(latLongData)[0]];
+
+                // debugger;
+
+                const zoomButton = 1;
+                const satelliteView = 'SATELLITE';
+
+                const mapTypeIdMapping = {
+                    HYBRID: google.maps.MapTypeId.HYBRID,
+                    ROADMAP: google.maps.MapTypeId.ROADMAP,
+                    SATELLITE: google.maps.MapTypeId.SATELLITE,
+                    TERRAIN: google.maps.MapTypeId.TERRAIN,
+                };
+                // debugger;
+                const map = new google.maps.Map(parent, {
+                    zoom: 13,
+                    center: { lat: firstLocation.lat/1000000, lng: firstLocation.long/1000000 },
+                });
+
+                map.setOptions({
+                    zoomControl: zoomButton ? true : false,
+                });
+                // const locationMarkers = document.querySelectorAll(".location-marker");
+
+                latLongData.forEach((markerElement) => {
+
+                    const latitude = parseFloat(markerElement.lat);
+                    const longitude = parseFloat(markerElement.long);
+                    const bodyText = markerElement.address;
+
+                    const title = markerElement.title;
+                    let markerIcon;
+                    if (markerImagePath) {
+
+                        markerIcon = {
+                            url: `${window.location.origin}${markerImagePath}`, // url
+                            scaledSize: new google.maps.Size(70, 70), // scaled size
+                            origin: new google.maps.Point(0, 0), // origin
+                            anchor: new google.maps.Point(0, 0) // anchor
+                        };
                     }
-                    var d = new Date;
-                    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * 365);
-                    document.cookie = consentCookieName + "=" + JSON.stringify(consentStatuses) + ";path=/;expires=" + d.toGMTString();
 
-                }
+                    if (!isNaN(latitude) && !isNaN(longitude)) {
+                        const marker = new google.maps.Marker({
+                            position: { lat: latitude/1000000, lng: longitude/1000000 },
+                            map: map,
+                            title: title,
+                            icon: markerIcon,
+                        });
 
-                function deleteCookie(name) {
-                    // Create an expired date.
-                    var expiredDate = new Date();
-                    expiredDate.setTime(expiredDate.getTime() - (1000 * 3600)); // Subtracting 1 hour from current time
+                        let contentString = `
+                    <div class="location-marker__info-window" style="padding: 6px 2px; max-width: 150px">
+                        <div class="location-marker__title" style="font-weight: bold; margin-bottom: 5px">${title}</div>
+                        <div class="location-marker__body-text" style="line-height: 1.4">${bodyText}</div>
+                    </div>
+                `;
 
-                    // Setting the cookie with an expired date deletes it.
-                    document.cookie = name + "=; expires=" + expiredDate.toGMTString() + "; path=/";
-                }
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: contentString,
+                        });
 
-                function getConsentStatuses() {
-                    var v = document.cookie.match('(^|;) ?' + consentCookieName + '=([^;]*)(;|$)');
-                    return v ? JSON.parse(v[2]) : {};
-                }
+                        marker.addListener("click", () => {
+                            infoWindow.open(map, marker);
+                        });
 
-                // Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
 
-                function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape) {
-                    el.parentNode.insertBefore(wrapper, el);
-                    wrapper.className = 'privacy-msg privacy-' + type + '-msg';
-                    wrapper.style.width = el.clientWidth + 'px';
-                    wrapper.style.height = el.clientHeight + 'px';
-                    wrapper.innerHTML = imageStatus == 1 ? "<div class='bgComtainer-image'><img class='bg-image' src='" + imagePath + "'/><div class='overlay'></div>" : "";
-                    wrapper.innerHTML += '<h2 style="color:' + textColor + '">' + heading + '</h2>';
-                    wrapper.innerHTML += '<p class="description" style="color:' + textColor + '">' + text + '</p>' + '<a href="#foo" class="link-action ' + btnShape + '" style="background-color: ' + btnColor + ';color:' + buttonTextColor + '" onclick="_2ClickIframePrivacy.EnableContent(\'' + type + '\'); return false;">' + btnText + '</a>';
-                    if (config.enableCookies) {
-                        wrapper.innerHTML = wrapper.innerHTML + '<label class="checkbox-label"  style="color:' + textColor + ';display: none"><input type="checkbox" checked style="border-color: ' + btnColor + '" name="remind-\'' + type + '\'" /> ' + config.rememberChoiceLabel + '</label>';
                     }
-                    if (config.privacyPolicyUrl) {
-                        wrapper.innerHTML = wrapper.innerHTML + '<br /><a href="' + config.privacyPolicyUrl + '">' + config.privacyPolicyLabel + '</a>';
-                    }
-                    wrapper.innerHTML = '<div class="wraper" style="background-color: ' + bgColor + '"><p>' + wrapper.innerHTML + '</p></div>';
-                    wrapper.appendChild(el);
+                });
 
+
+
+
+            }
+
+
+            this.init = function (Userconfig, solSetting, key) {
+
+                // Read UserConfiguration:
+                if (typeof Userconfig.enableCookies !== 'undefined') {
+                    config.enableCookies = Userconfig.enableCookies;
+                }
+                if (typeof Userconfig.useSessionCookie !== 'undefined') {
+                    config.useSessionCookie = Userconfig.useSessionCookie;
+                }
+                if (typeof Userconfig.cookieNamespace !== 'undefined') {
+                    config.cookieNamespace = Userconfig.cookieNamespace;
+                }
+                if (typeof Userconfig.privacyPolicyUrl !== 'undefined') {
+                    config.privacyPolicyUrl = Userconfig.privacyPolicyUrl;
+                }
+                if (typeof Userconfig.showContentLabel !== 'undefined') {
+                    config.showContentLabel = Userconfig.showContentLabel;
+                }
+                if (typeof Userconfig.rememberChoiceLabel !== 'undefined') {
+                    config.rememberChoiceLabel = Userconfig.rememberChoiceLabel;
+                }
+                if (typeof Userconfig.privacyPolicyLabel !== 'undefined') {
+                    config.privacyPolicyLabel = Userconfig.privacyPolicyLabel;
                 }
 
-                this.EnableContent = function (type) {
-                    var i;
+                if (Array.isArray(Userconfig.CustomTypes)) {
+                    this.types = Userconfig.CustomTypes;
+                }
+                for (let i = 0; i < this.types.length; i++) {
+                    var selector = document.querySelectorAll('iframe[data-2click-type="' + this.types[i].type + '"]');
 
-                    // Cookies globally enabled by config?
-                    var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
+                    for (let x = 0; x < selector.length; x++) {
 
-                    if (config.enableCookies) {
-                        for (let i = 0; i < checkboxes.length; i++) {
-                            if (checkboxes[i].checked == true) {
-                                let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service'); // get service name from iframe
-                                setConsentStatus(service, '1');
+                        let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
+
+                        if (consentStatuses[service] !== '1') {
+
+                            wrap(selector[x], document.createElement('div'),
+                                service,
+                                solSetting[service].content,
+                                solSetting[service].heading,
+                                solSetting[service].buttonColor,
+                                solSetting[service].textColor,
+                                solSetting[service].backgroundImage,
+                                solSetting[service].enableBackgroundImage,
+                                solSetting[service].backgroundImageColor,
+                                solSetting[service].buttonTextColor,
+                                solSetting[service].buttonText,
+                                solSetting[service].buttonShape,
+                            );
+                        } else {
+                            if(service === 'google_reviewlisting'){
+                                let parent = selector[x];
+                                let mapDiv = document.createElement('div');
+                                mapDiv.id = "map" + i;
+                                mapDiv.className = "map";
+                                parent.parentNode.insertBefore(mapDiv, parent.nextSibling)
+                                loadMapScript(selector[x].nextElementSibling);
                             }
+
+                            selector[x].src = selector[x].getAttribute("data-src");
+                            gdprInner?.classList.remove('gdprInner');
                         }
+
+
+
+
                     }
 
-
-                    var x = document.querySelectorAll('div.privacy-' + type + '-msg .wraper');
-                    for (i = 0; i < x.length; i++) {
-                        while (x[i].firstChild) {
-                            x[i].removeChild(x[i].firstChild);
-                        }
-                    }
-
-                    x = document.querySelectorAll('div.privacy-' + type + '-msg');
-                    for (i = 0; i < x.length; i++) {
-                        var parent = x[i].parentNode;
-
-                        // Move all children out of the element
-                        while (x[i].firstChild) parent.insertBefore(x[i].firstChild, x[i]);
-
-                        // Remove the empty element
-                        parent.removeChild(x[i]);
-                    }
-
-                    x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
-                    for (i = 0; i < x.length; i++) {
-                        x[i].src = x[i].getAttribute("data-src");
-                    }
-
-                    // If available, execute the callback that is defined for the currently active type
-                    for (i = 0; i < this.types.length; i++) {
-                        if (this.types[i].type == type && this.types[i].callback) {
-                            window[this.types[i].callback]();
-                        }
-                    }
-
-
-                    for (let i = 0; i < toggleButtons.length; i++) {
-                        let extTitle = toggleButtons[i].getAttribute('data-ext-title');
-                        let service = extTitle.split('-')[3]; // assuming that extension title always has the service name at the third position
-
-                        // initially set the checkbox according to the cookie value
-
-                        toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
-
-                    }
-                    gdprInner?.classList.remove('gdprInner');
-                    if(areAllChecked()) {
-                        acceptBtn.disabled = true;
-                        acceptBtn.classList.add('disabled');
-                    }
-                }
-
-                function DisableContent(type, e) {
-                    var i;
-
-                    // Accessing all relevant checkboxes
-                    var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
-
-                    for (let i = 0; i < checkboxes.length; i++) {
-                        if (checkboxes[i].checked == false) { // Checking if the checkbox is not checked
-                            let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service');
-                            setConsentStatus(service, '0'); // Set consent status to '0' indicating disapproval
-                        }
-                    }
-
-                    var x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
-                    for (i = 0; i < x.length; i++) {
-                        x[i].src = ''; // Disabling the iframe by setting src as empty
-                    }
-
-                    // If available, execute the callback that is defined for the currently active type
-                    for (i = 0; i < e.length; i++) {
-                        if (e[i].type == type && e[i].callback) {
-                            window[e[i].callback]();
-                        }
-                    }
-                    gdprInner?.classList.add('gdprInner');
-                    acceptBtn.disabled = false;
-                    acceptBtn.classList.remove('disabled');
                 }
 
 
-                this.init = function (Userconfig, solSetting, key) {
+                // Get all toggle buttons
+                // For each toggle button
+                for (let i = 0; i < toggleButtons.length; i++) {
 
-                    // Read UserConfiguration:
-                    if (typeof Userconfig.enableCookies !== 'undefined') {
-                        config.enableCookies = Userconfig.enableCookies;
-                    }
-                    if (typeof Userconfig.useSessionCookie !== 'undefined') {
-                        config.useSessionCookie = Userconfig.useSessionCookie;
-                    }
-                    if (typeof Userconfig.cookieNamespace !== 'undefined') {
-                        config.cookieNamespace = Userconfig.cookieNamespace;
-                    }
-                    if (typeof Userconfig.privacyPolicyUrl !== 'undefined') {
-                        config.privacyPolicyUrl = Userconfig.privacyPolicyUrl;
-                    }
-                    if (typeof Userconfig.showContentLabel !== 'undefined') {
-                        config.showContentLabel = Userconfig.showContentLabel;
-                    }
-                    if (typeof Userconfig.rememberChoiceLabel !== 'undefined') {
-                        config.rememberChoiceLabel = Userconfig.rememberChoiceLabel;
-                    }
-                    if (typeof Userconfig.privacyPolicyLabel !== 'undefined') {
-                        config.privacyPolicyLabel = Userconfig.privacyPolicyLabel;
-                    }
+                    let extTitle = toggleButtons[i].getAttribute('data-ext-title');
+                    let service = extTitle;
 
-                    if (Array.isArray(Userconfig.CustomTypes)) {
-                        this.types = Userconfig.CustomTypes;
-                    }
-                    for (let i = 0; i < this.types.length; i++) {
-                        var selector = document.querySelectorAll('iframe[data-2click-type="' + this.types[i].type + '"]');
+                    // initially set the checkbox according to the cookie value
 
+                    toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
+                    let wrapperFunctionData = this.types;
 
+                    // add event listener on checkbox change
+
+                    toggleButtons[i].addEventListener('change', function (e) {
+
+                        setConsentStatus(service, this.checked ? '1' : '0'); // convert boolean to number
+                        this.checked;
+
+                        if (this.checked == false) {
+
+                            DisableContent(service, wrapperFunctionData)
+                            wrapfunction(wrapperFunctionData,arr,service);
+
+                        } else {
+                            _2ClickIframePrivacy.EnableContent(service)
+                        }
+                    });
+                }
+
+                function wrapfunction(e ,settings ,key) {
+
+                    for (let i = 0; i < e.length; i++) {
+
+                        var selector = document.querySelectorAll('iframe[data-2click-type="' + e[i].type + '"]');
                         for (let x = 0; x < selector.length; x++) {
-
                             let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
-
+                            if(service == key){
                                 if (consentStatuses[service] !== '1') {
-
-                                    wrap(selector[x], document.createElement('div'),
-                                        service,
-                                        solSetting[service].content,
-                                        solSetting[service].heading,
-                                        solSetting[service].buttonColor,
-                                        solSetting[service].textColor,
-                                        solSetting[service].backgroundImage,
-                                        solSetting[service].enableBackgroundImage,
-                                        solSetting[service].backgroundImageColor,
-                                        solSetting[service].buttonTextColor,
-                                        solSetting[service].buttonText,
-                                        solSetting[service].buttonShape,
+                                    wrap(selector[x],
+                                        document.createElement('div'),
+                                        service, settings[service].content,
+                                        settings[service].heading,
+                                        settings[service].buttonColor,
+                                        settings[service].buttonTextColor,
+                                        settings[service].backgroundImage,
+                                        settings[service].enableBackgroundImage,
+                                        settings[service].backgroundImageColor,
+                                        settings[service].buttonTextColor,
+                                        settings[service].buttonText,
+                                        settings[service].buttonShape,
                                     );
                                 } else {
                                     selector[x].src = selector[x].getAttribute("data-src");
-                                    gdprInner?.classList.remove('gdprInner');
                                 }
-
-
-
-
-                        }
-
-                    }
-
-
-                    // Get all toggle buttons
-                    // For each toggle button
-                    for (let i = 0; i < toggleButtons.length; i++) {
-
-                        let extTitle = toggleButtons[i].getAttribute('data-ext-title');
-                        let service = extTitle.split('-')[3]; // assuming that extension title always has the service name at the third position
-
-                        // initially set the checkbox according to the cookie value
-
-                        toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
-                        let wrapperFunctionData = this.types;
-
-                        // add event listener on checkbox change
-
-                        toggleButtons[i].addEventListener('change', function (e) {
-
-                            setConsentStatus(service, this.checked ? '1' : '0'); // convert boolean to number
-                            this.checked;
-
-                            if (this.checked == false) {
-
-                                DisableContent(service, wrapperFunctionData)
-                                wrapfunction(wrapperFunctionData,arr,service);
-
-                            } else {
-                                _2ClickIframePrivacy.EnableContent(service)
-                            }
-                        });
-                    }
-
-                    function wrapfunction(e ,settings ,key) {
-
-                        for (let i = 0; i < e.length; i++) {
-
-                            var selector = document.querySelectorAll('iframe[data-2click-type="' + e[i].type + '"]');
-                            for (let x = 0; x < selector.length; x++) {
-                                let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
-                                if(service == key){
-                                    if (consentStatuses[service] !== '1') {
-                                        wrap(selector[x],
-                                            document.createElement('div'),
-                                            service, settings[service].content,
-                                            settings[service].heading,
-                                            settings[service].buttonColor,
-                                            settings[service].buttonTextColor,
-                                            settings[service].backgroundImage,
-                                            settings[service].enableBackgroundImage,
-                                            settings[service].backgroundImageColor,
-                                            settings[service].buttonTextColor,
-                                            settings[service].buttonText,
-                                            settings[service].buttonShape,
-                                        );
-                                    } else {
-                                        selector[x].src = selector[x].getAttribute("data-src");
-                                    }
-                                }
-
                             }
 
                         }
 
                     }
 
-                    if(areAllChecked()) {
-                        acceptBtn.disabled = true;
-                        acceptBtn.classList.add('disabled');
-                    }
-
-                };
-            }
-        }
-        function areAllChecked() {
-            for(let i=0; i<switchs.length; i++){
-                if(!switchs[i].checked){
-                    return false;
                 }
-            }
-            return true;
-        }
 
-    </f:asset.script>
+                if(areAllChecked()) {
+                    acceptBtn.disabled = true;
+                    acceptBtn.classList.add('disabled');
+                }
+
+            };
+        }
+    }
+    function areAllChecked() {
+        for(let i=0; i<switchs.length; i++){
+            if(!switchs[i].checked){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+</f:asset.script>
 
 
 </body>
