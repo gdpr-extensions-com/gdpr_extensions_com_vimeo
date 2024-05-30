@@ -57,6 +57,7 @@ class GdprVimeoController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 
         $this->view->assign('VimeoData', $this->contentObject->data);
         $this->view->assign('VimeoSettings', $settings);
+        $this->view->assign('rootPid', $GLOBALS['TSFE']->site->getRootPageId());
         return $this->htmlResponse();
     }
 }

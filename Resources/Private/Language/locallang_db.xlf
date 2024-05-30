@@ -82,7 +82,10 @@
 				<source>Cookie Widget Position</source>
 			</trans-unit>
 			<trans-unit id="tx_gdpr_extensions_com_vimeo_gdprvimeo.name" resname="tx_gdpr_extensions_com_vimeo_gdprvimeo.name">
-				<source>GDPR-Extensions.com - Vimeo Videoplayer</source>
+				<source>Vimeo</source>
+			</trans-unit>
+			<trans-unit id="tx_gdpr_extensions_com_vimeo_gdprvimeo.name.tab" resname="tx_gdpr_extensions_com_vimeo_gdprvimeo.name">
+				<source>GDPR-Extensions-Com</source>
 			</trans-unit>
 			<trans-unit id="tx_gdpr_extensions_com_vimeo_gdprvimeo.description" resname="tx_gdpr_extensions_com_vimeo_gdprvimeo.description">
 				<source></source>

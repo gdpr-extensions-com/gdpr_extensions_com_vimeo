@@ -48,8 +48,13 @@ defined('TYPO3') || die();
     );
     // wizards
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        'mod.wizards.newContentElement.wizardItems {
+               gdpr.header = LLL:EXT:gdpr_extensions_com_youtube/Resources/Private/Language/locallang_db.xlf:tx_gdpr_extensions_com_vimeo_gdprvimeo.name.tab
+        }'
+    );
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         'mod {
-            wizards.newContentElement.wizardItems.common {
+            wizards.newContentElement.wizardItems.gdpr {
                 elements {
                     gdprvimeo {
                         iconIdentifier = gdpr_extensions_com_vimeo-plugin-gdprvimeo

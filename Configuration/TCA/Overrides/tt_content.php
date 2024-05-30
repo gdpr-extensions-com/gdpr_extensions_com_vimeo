@@ -5,7 +5,7 @@ $frontendLanguageFilePrefix = 'LLL:EXT:frontend/Resources/Private/Language/local
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'GdprExtensionsComVimeo',
     'Gdprvimeo',
-    'GDPR - Vimeo'
+    'Vimeo'
 );
 
 $fields = [

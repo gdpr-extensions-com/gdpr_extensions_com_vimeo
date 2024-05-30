@@ -37,8 +37,8 @@ plugin.tx_gdprextensionscomvimeo_gdprcookiewidget {
     }
 }
 
-page = PAGE
-page.999 < tt_content.list.20.gdprextensionscomvimeo_gdprcookiewidget
+#page = PAGE
+#page.999 < tt_content.list.20.gdprextensionscomvimeo_gdprcookiewidget
 
 # these classes are only used in auto-generated templates
 plugin.tx_gdprextensionscomvimeo._CSS_DEFAULT_STYLE (

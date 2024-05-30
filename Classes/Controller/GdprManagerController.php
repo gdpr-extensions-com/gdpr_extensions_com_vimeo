@@ -70,7 +70,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         $packageManager = GeneralUtility::makeInstance(PackageManager::class);
         $extensions = ExtensionManagementUtility::getLoadedExtensionListArray();
         $extensionNames = [];
-        
+
         foreach ($extensions as $extensionKey) {
             if ($packageManager->isPackageAvailable($extensionKey)) {
                 $extensionName = $packageManager->getPackage($extensionKey)->getPackageMetaData()->getTitle();
@@ -78,12 +78,12 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 $extensionNames[$extensionKey] = $extensionName;
             }
         }
-        
+
            // Filter based on keys, looking for 'gdpr_two_x' in the extensionKey.
            $twoClickSolutions = array_filter($extensionNames, function ($key) {
             return str_contains($key, 'gdpr_two_x') || str_contains($key, 'gdpr_extensions_com');
         }, ARRAY_FILTER_USE_KEY);
-        
+
 
         $gdprDellQb = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_gdprextensionscomyoutube_domain_model_gdprmanager');
 
@@ -140,6 +140,8 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
         $result = $queryBuilder->execute()->fetchAssociative();
 
+        $vimeoData = $this->gdprManagerRepository->findByExtension_key('gdpr_extensions_com_vimeo')->toArray();
+        return $this->redirect('edit',null,null,['gdprManager' => $vimeoData[0]]);
 
         $this->view->assign('uploadImageUrl', $uploadImageUrl);
         $this->view->assign('cookieWidgetData', $result);
@@ -204,7 +206,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         $uploadImageUrl = $this->uriBuilder->reset()
             ->uriFor('uploadImage');
         $this->view->assign('uploadImageUrl', $uploadImageUrl);
-        
+
         if(strpos($gdprManager->getExtensionTitle(), 'Google-Review') !== false){
             $this->view->assign('google_review', 1);
         }
