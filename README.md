@@ -23,7 +23,7 @@ This extension works in parallel with our GDPR-extensions.com Consent Manager, w
 - It provides you with a content element “Consent Manager” that you can add to your website where all cookies are listed and user can manage the Vimeo 2 Click cookie any time.
 - Website viewers will be able to view the Consent Manager anytime by clicking on the cookie widget which you can always customize its styling, language content, and position.
 
-For more information on GDPR-extensions.com Consent Manager please visit [Typo3 repo Link](https://example.com)
+For more information on GDPR-extensions.com Consent Manager please visit [Typo3 repo Link](https://extensions.typo3.org/extension/gdpr_extensions_com_cm)
 
 ## How it Works?
 
