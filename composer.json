@@ -1,7 +1,7 @@
 {
   "name": "gdpr-extensions-com/gdpr-extensions-com-vimeo",
   "type": "typo3-cms-extension",
-  "description": "",
+  "description": "The GDPR Vimeo 2 Click Solution, brought to you by GDPR-Extensions.com, is a feature-rich solution designed to empower website owners in effectively managing Vimeo videos and bolstering user privacy.",
   "authors": [],
   "license": "GPL-2.0-or-later",
   "require": {
