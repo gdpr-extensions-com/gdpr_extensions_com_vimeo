@@ -2,7 +2,7 @@
   "name": "gdpr-extensions-com/gdpr-extensions-com-vimeo",
   "type": "typo3-cms-extension",
   "description": "",
-  "version": "1.0.1",
+  "version": "1.0.9",
   "authors": [],
   "license": "GPL-2.0-or-later",
   "require": {
