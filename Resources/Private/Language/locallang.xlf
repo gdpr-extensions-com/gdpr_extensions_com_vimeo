@@ -33,7 +33,23 @@
 			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_text.description" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_text.description">
 				<source>Button Text</source>
 			</trans-unit>
-			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api">
+			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.ContentMask"
+			resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.ContentMask">
+				<source> Customize Content Mask</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.CustomizeBtn"
+				resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.CustomizeBtn">
+				<source> Customize Button</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.CustomizeMsg"
+				resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.CustomizeMsg">
+				<source> Customize Message</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.heading_color"
+				resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.heading_color">
+				<source>Heading Color</source>
+			</trans-unit>
+           <trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api">
 			 <source>Map Api Key</source>
 		  </trans-unit>
 		  <trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api.description" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.map_api.description">
@@ -70,10 +86,10 @@
 				<source>Background Image</source>
 			</trans-unit>
 			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color">
-				<source>Background Image Color</source>
+				<source>Background Color</source>
 			</trans-unit>
 			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color.description" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.background_image_color.description">
-				<source>Background Image Color</source>
+				<source>Background Color</source>
 			</trans-unit>
 			<trans-unit id="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_color" resname="tx_gdprextensionscomyoutube_domain_model_gdprmanager.button_color">
 				<source>Button Color</source>

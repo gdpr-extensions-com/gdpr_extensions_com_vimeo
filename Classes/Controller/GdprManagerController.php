@@ -118,6 +118,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                     'content' => '', // Default empty string
                     'button_text' => '', // Default empty string
                     'enable_background_image' => 0, // Default 0
+                    'heading_color' => '', // Default empty string
                     'background_image' => '', // Default empty string
                     'background_image_color' => '', // Default empty string
                     'button_color' => '', // Default empty string
@@ -227,7 +228,8 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
      */
     public function updateAction(\GdprExtensionsCom\GdprExtensionsComVimeo\Domain\Model\GdprManager $gdprManager) : \Psr\Http\Message\ResponseInterface
     {
-            if($this->request->hasArgument('tx_gdprextensionscomvimeo_web_ggdprextensionscomvimeogdprmanager')){
+        $locationsData = [];
+        if($this->request->hasArgument('tx_gdprextensionscomvimeo_web_ggdprextensionscomvimeogdprmanager')){
             $locationsData = $this->request->getArgument('tx_gdprextensionscomvimeo_web_ggdprextensionscomvimeogdprmanager')['locations'];
         }
         elseif ($this->request->hasArgument('locations')){
