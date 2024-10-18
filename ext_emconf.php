@@ -8,10 +8,10 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'support@gdpr-extensions.com',
     'state' => 'stable',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.9',
+    'version' => '1.0.10',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-12.4.10',
+            'typo3' => '11.5.0-12.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
